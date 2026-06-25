@@ -1,0 +1,24 @@
+Disable the Legacy Public Listener
+
+GOAL:
+- Inspect which of the in-scope ports are listening and how they are bound
+- Change the project configuration so the legacy listener is no longer started
+- Reload the stack using the project helper script so the change applies to the running process.
+- Confirm the primary site still responds and the legacy port no longer listens.
+
+SCOPE
+Only TCP ports 18180 and 18182 are relevant. The other ports on the listener are treated as unrelated platform noise. 
+
+PROBLEM:
+You are reviewing a web service after a compatability test. The main site is still needed, but an extra public listener from the test was never removed and is now unnessary exposure. 
+The service is already running, so use the live socket table to confirm the current state before changing configuration. 
+Use the listener table as your before and after evidence. A correct fix removes the extra port without changing the service users still depend on.
+
+MY THOUGHT PROCESS AND SOLUTION
+- In the terminal, there is a service environment variable and a restart service bash script. Initially, I ran ss - lnpt to see the live sockets table and confirmed the legacy port is available. To fix,
+the issue I navigated to the service.env and disable the legacy port to false. After that, I navigated back to my current directory and apply the restart-service.sh. I was able to remove the legacy port without
+disrupting the service users need.
+
+In Summary:
+In this challenge, I cleaned up a realistic post-test exposure issue on linux host. I identified a leftover public listener, disabled it through the existing service configuration, and verified that the required public site still worked. This is a common hardneing task: remove temporary exposure without disrupting the servers users still need. 
+The required listener stays available, while the comptabilioty listener no longer expands the host's public surface.
