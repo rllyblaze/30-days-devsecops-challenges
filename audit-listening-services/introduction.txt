@@ -1,0 +1,35 @@
+CHALLENGES
+
+- Perform a quick runtime audit
+
+a. Inspect a live listening state
+b. Separate the task listeners from the background host noise
+c. Record the real exposure boundary for each one/
+
+GOAL
+- Trustworthy operational baseline: which listener is public,
+- which listener is local-only, 
+- and what evidence proves the classification
+
+PROBLEM
+- Two temporary task listeners were started for the exercise, but the previous operator did not leave a trustworthy exposure note. Before the host can be handed back to the team, you need a clean baseline that shows what is actually reachable. 
+
+SOLUTION
+To read the binding on the task ports: run ss -lntp
+
+ss - another utility to investigate sockets : it allows showing information similar to netstat. It can display more TCP and state information than other tools.
+
+-l, listening: Display only listening sockets
+-n, numeric: Do not try to resolve numeric servies names, Show exact bandwidth values, instead of human-readable.
+-t, tcp: Display TCP sockers
+-p, processes: Show process using socket
+
+127.0.0.1 is local only
+0.0.0.0 is public
+127.0.0.1:18081
+0.0.0.0:18080
+	
+
+MY THOUGHT PROCESS
+
+In this lab, I ran ss -lntp to read the ports on my linux host. ONLY TCP ports 18080 and 18081 are in scope and all other ports are platform noise. By running ss -lntp, I was able to identify which ports is read which ports is listening on my linux host with the -l command, only show numeric value with -n instead of a port name. For example, instead of ssh, it is 22. In addition, -t listed all the TCP sockets. I only need TCP ports. At last, -p showed the processes that are using the sockets; processes is the programs or task that communicate with other acrosss differents machines. 
