@@ -1,0 +1,31 @@
+Context
+
+You are taking over a small Linux web host near the end of a release rehearsal. The public landing page still needs to stay reachable for the team, but the internal admin interface should never have been left open on
+the network.
+
+Before the host is handed back, you need to confirm how the two rehearsal listeners are bound, find the configurtation that controls the admin service binding, and tighten it without interrupting the public page. This is the kind of low-drama, high-importance cleanup that often lands on platform or DevSecOps teams after a deployment window.
+
+The boundary is bind address, not service existence: the public page may listen broadly, but the admin interface should be host-local.
+
+TO DO:
+- confirm the current bind state
+- find the setting that controls the admin listener
+- narrow that listener without breaking the public site
+
+GOAL
+- Inspect the bind addresses in use for TCP ports 18080 and 18081
+- Change the admin listener so port 18081 is bound only to 127.0.0.1, without moving it to another port
+- Reload or restart that admin service in a way this project expects, so my change takes effect.
+- Confirm the public experience on port 18080 still works and the admin interface on 18081 still answeers on localhost
+
+MY THOUGHT PROCESS
+First, I ran ss -lt to list all the TCP listening on the server to inspect the address on the port 18080 and 18081. 
+Then, I ran ls to list all the files in my directory. I use the cat cmd to view the contents of the files. I configured the BIND_ADDRESS to localhost in the admin service environment variable.
+After, I apply the the admin script to apply the change.
+Finally, I ran ss -ltp to see the changes, list all the TCP ports, which sockets they listening on, and the process associated with the ports.
+
+SUMMARY
+In this challenge, I complete a realistic post-release cleanup on a Linux host. I confirmed how the rehearsal listeners were bound, tracked down the configuration that controlled the admin listener, restricted it to localhost, and verifed that the public landing page still worked. This is a common DevSecOps hardening tasks: reduce unnecessary exposure without breaking the service that still needs to stay online. 
+The public page remains reachable, while the admin interface is limited to the host-local boundary where it belongs.
+
+
