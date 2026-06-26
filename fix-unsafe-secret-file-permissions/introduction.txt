@@ -1,0 +1,51 @@
+Tighten the Secret File Permissions
+You are reviewing a small service that reads a local token file during startup. The service still needs that token, but the file was left readable by every local user, 
+which turns a service credential into host-wide exposure.
+
+This is a permission boundary fix. Inspect the file ownership and mode, remove access for unrelated users, and then prove the application can still read the token through 
+its normal service path.
+
+Avoid over-tightening the file in a way that breaks the service account. The right result narrows access while keeping the intended group-based read path working.
+
+Current Situation
+The project lives at /home/labex/project.
+
+The application uses service-token.txt, and the secretapp service user must keep the access it needs. A project restart helper is provided so you can test the application 
+after changing permissions.
+
+Scope
+Focus on port 18480, service-token.txt, and the service user boundary for this project.
+
+Do not modify the default labex user or its sudo access.
+
+Your Goal
+Move to /home/labex/project.
+Inspect service-token.txt ownership and permission bits.
+Adjust the mode so the service user and owning group retain read access while others do not.
+Run the application restart helper after permission changes.
+Confirm the application endpoint at http://127.0.0.1:18480/ still reports success.
+
+-- MY WORK
+1. Inspect service-token.txt ownership and permission bits.
+I ran ls -l to inspect the service-token.txt. 
+It is a file with
+- read , write, no execute for user, (rw-)
+- read, no write, no execute for group (r--)
+- read, no write, no execute for other (r--)
+
+2. Adjust the mode so the service user and owning group retain read access while others do not.
+I ran chmod o-r service-token.txt to remove others read access for service-token.txt
+
+3. Run the application restart helper after permission changes.
+I ran ./restart-app.sh to restart
+
+4. Confirm the application endpoint at http://127.0.0.1:18480/ still reports success.
+I ran curl -i http://127.0.0.1:18480/ and app is live.
+
+SUMMARY
+In this challenge, I corrected a realistic post-support permission drift on a Linux host. 
+I tightened the secret file, removed unnecessary read access, and verified that the application still worked. 
+This reflects a common hardening task: restore least privilege on sensitive files without breaking the service that depends on them.
+
+The secret remains available to the service boundary that needs it, while unrelated local users lose read access.
+

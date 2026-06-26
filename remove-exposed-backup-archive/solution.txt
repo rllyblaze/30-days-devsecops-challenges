@@ -1,0 +1,16 @@
+Thought process
+
+- I think the backup data is exposed to the public because I ran ss -ltpn and the port 18380 is open to all traffic.
+- First, I read all files and subdirectories file to locate the site-backup.tar.gz and took notes of which directory it is in with ls and cd and cat commands
+- Then I moved the site-bakup.tar.gz from the webroot directory to the private-backups directory with mv webroot/site-backup.tar.gz private-backups
+- To confirm the public url no longer serves the archive and the root still worked, I ran curl -i with the localadress and port /webroot, but I am not sure where to look at because 
+the content is the same.
+- I then curled with the same local address and port / site-backup.tar.gz. No much of a difference to me. 
+- In conclusion, I am not seeing what is there!
+
+Summary
+In this challenge, I cleaned up a realistic post-troubleshooting exposure on a Linux web host. I identified a sensitive backup archive inside the public web root,
+moved it into private storage, and verified that the public site still worked. This is a common hardening task: remove accidental file exposure without disrupting
+normal content delivery.
+
+The backup data is preserved, but it no longer sits inside the web server's published document boundary.

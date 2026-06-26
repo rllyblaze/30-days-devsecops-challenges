@@ -1,0 +1,61 @@
+Problem
+You are checking a small static before it is handed back to the application team. The site itself is expected to stay online, but the /downloads/ directory is exposing a browsable index instead of only serving known files.
+Start by reproducing the behavior over HTTP, then change the server configuration that controls directory indexes. The fix should remove the listing without turning the whole site or the direct download path into an outage.
+Keep distinction clear while you work: /downloads/ should stop listing the directory, but /downloads/release-notes.txt should remain available as an explicit file request.
+
+Scope
+Only port 18280, the site root, /downloads/, and /downloads/release-notes.txt are in scope.
+Work with server.env and restart-server.sh rather than spawning a different web server.
+
+Goal
+= Use HTTP to confirm how /downloads/ behaves before any change
+- Change the project configuration so directory listing is off
+- Apply the change through the project restart helper
+- Recheck /downloads/ and confirm release-notes.txt and the site root still succeed.
+
+Thought process
+I use a hint: curl -i against http://127.0.0.1:18280/downloads/ to read the status line and body
+Problem
+You are checking a small static before it is handed back to the application team. The site itself is expected to stay online, but the /downloads/ directory is exposing a browsable index instead of only serving known files.
+Start by reproducing the behavior over HTTP, then change the server configuration that controls directory indexes. The fix should remove the listing without turning the whole site or the direct download path into an outage.
+Keep distinction clear while you work: /downloads/ should stop listing the directory, but /downloads/release-notes.txt should remain available as an explicit file request.
+
+Scope
+Only port 18280, the site root, /downloads/, and /downloads/release-notes.txt are in scope.
+Work with server.env and restart-server.sh rather than spawning a different web server.
+
+Goal
+= Use HTTP to confirm how /downloads/ behaves before any change
+- Change the project configuration so directory listing is off
+- Apply the change through the project restart helper
+- Recheck /downloads/ and confirm release-notes.txt and the site root still succeed.
+
+Thought process
+I use a hint: curl -i against http://127.0.0.1:18280/downloads/ to read the status line and body
+After, I listed all the files in my directory with ls -la to list the hidden file as well, and changed the server environment variable to disable directory listing to false. 
+The, I ran the restart server script to apply the changes. 
+Finally, to see the changes, I ran curl -i http://120.0.0.1:18280/downloads/ and the directory listing is diabled.
+
+Summary
+In this challenge, I handled a realistic web hardening cleanup after a content rollout. I disable a browsable directory listing, restarted the service through the existing helper script, and verified that legitimate file delivery still worked. This is a practical DevSecOps task: reduce unnecessary information exposre without breaking normal content access.
+The site remains useful to visitors, but the directory structure is no longer exposed an an index.
+
+My note
+What is curl 
+curl is used in command lines or scripts to transfer data.
+curl supports:
+-protocols: FTP, SFTP, HTTP, HTTPS
+- proxies: socks4, socks5, HTTPS, HTTP
+- HTTP
+- FTP
+- SCL + SFTP
+- TLS
+- QUIC
+- Auth
+- HTTP compression
+- Name resolviong
+- Connection
+= Transfers
+- URLs
+- Output
+

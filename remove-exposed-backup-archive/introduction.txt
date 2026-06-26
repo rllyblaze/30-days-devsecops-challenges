@@ -1,0 +1,31 @@
+Remove the Exposed Backup Archive
+You are reviewing a public web root after a rushed backup handoff. The site still needs to serve normal pages, but a backup archive was left inside the served tree and can be
+downloaded by anyone who knows the URL.
+
+This is a data exposure cleanup, not a service replacement. Confirm the archive is exposed, move it out of the document root into the prepared private area, and verify that 
+the site still works after the file is no longer public.
+
+Preserve the backup data. A good fix changes where the archive lives relative to the web server, not whether the backup exists at all.
+
+
+
+Current Situation
+The public site is already running on the exercise port. The project contains a served webroot/ and a private-backups/ directory intended for files that should not be mapped
+by the web server.
+
+Scope
+Focus on site-backup.tar.gz, the project webroot/, the existing private-backups/ directory, and HTTP URLs on port 18380.
+
+Ignore unrelated host services. Do not delete the backup data.
+
+Your Goal
+Move to /home/labex/project.
+Confirm the backup is currently reachable at the obvious URL on port 18380.
+Decide where it lives relative to the active document root.
+Relocate it into private-backups/ without deleting the data.
+Confirm the public URL no longer serves the archive and the site root still works.
+Acceptance Criteria
+The public site remains available on port 18380.
+The backup archive is no longer present under the served web root.
+The backup archive exists under private-backups/.
+The old public archive URL no longer serves the file.
